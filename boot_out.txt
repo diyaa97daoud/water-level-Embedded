@@ -1,0 +1,5 @@
+Adafruit CircuitPython 10.0.3 on 2025-10-17; Adafruit Feather Bluefruit Sense with nRF52840
+Board ID:feather_bluefruit_sense
+UID:BAF0BE913095BF03
+boot.py output:
+Filesystem: WRITABLE (for BLE provisioning)
