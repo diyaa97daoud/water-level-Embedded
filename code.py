@@ -80,7 +80,7 @@ except Exception as e:
 try:
     relay_pin = digitalio.DigitalInOut(board.D12)
     relay_pin.direction = digitalio.Direction.OUTPUT
-    relay_pin.value = False  # Start with pump OFF
+    relay_pin.value = True  # Start with pump OFF (Active-LOW relay: True = OFF)
     print("✓ Relay initialized on D12 (Pump OFF)")
     RELAY_AVAILABLE = True
 except Exception as e:
@@ -320,7 +320,7 @@ def main_operation(config):
                 if pump_on and config and distance <= config.get('min_threshold', 5.0):
                     pump_on = False
                     if RELAY_AVAILABLE:
-                        relay_pin.value = False
+                        relay_pin.value = True  # Active-LOW relay: True = OFF
                     print(f"🛑 AUTO-STOP: Water reached HIGH level (distance={distance:.1f}cm <= {config.get('min_threshold', 5.0)}cm)")
                     show_message("Pump AUTO-STOP", "High water level", "reached!")
                     time.sleep(1)
@@ -368,7 +368,7 @@ def main_operation(config):
                                     if not pump_on:
                                         pump_on = True
                                         if RELAY_AVAILABLE:
-                                            relay_pin.value = True
+                                            relay_pin.value = False  # Active-LOW relay: False = ON
                                         print("✓ Pump STARTED by command")
                                         show_message("Pump STARTED", "By command", "")
                                         time.sleep(1)
@@ -376,7 +376,7 @@ def main_operation(config):
                                     if pump_on:
                                         pump_on = False
                                         if RELAY_AVAILABLE:
-                                            relay_pin.value = False
+                                            relay_pin.value = True  # Active-LOW relay: True = OFF
                                         print("✓ Pump STOPPED by command")
                                         show_message("Pump STOPPED", "By command", "")
                                         time.sleep(1)
@@ -385,7 +385,7 @@ def main_operation(config):
                             elif cmd_data.get("command") == "START":
                                 pump_on = True
                                 if RELAY_AVAILABLE:
-                                    relay_pin.value = True
+                                    relay_pin.value = False  # Active-LOW relay: False = ON
                                 print("✓ PUMP STARTED")
                                 show_message("PUMP START", f"D:{distance:.1f}cm", "Pump: ON")
                             
